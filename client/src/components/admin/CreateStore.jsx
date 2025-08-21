@@ -49,56 +49,94 @@ const CreateStore = () => {
   };
 
   return (
-    <div>
-      <h1>Create New Store</h1>
-      {errors.form && <div>{errors.form}</div>}
-      {success && <div>Store created successfully!</div>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Store Name:</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Store Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Store Address:</label>
-          <textarea
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Store Owner:</label>
-          <select
-            value={ownerId}
-            onChange={(e) => setOwnerId(e.target.value)}
-            disabled={storeOwners.length === 0}
+    <div className="p-6 bg-gray-100 min-h-screen">
+      <div className="max-w-2xl mx-auto bg-white shadow-lg rounded-2xl p-8">
+        <h1 className="text-2xl font-bold text-gray-800 mb-6">
+          Create New Store
+        </h1>
+
+        {errors.form && (
+          <div className="mb-4 p-3 bg-red-100 text-red-600 rounded-lg">
+            {errors.form}
+          </div>
+        )}
+        {success && (
+          <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-lg">
+            Store created successfully!
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-gray-700 font-medium">
+              Store Name
+            </label>
+            <input
+              type="text"
+              className="w-full mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-700 font-medium">
+              Store Email
+            </label>
+            <input
+              type="email"
+              className="w-full mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-700 font-medium">
+              Store Address
+            </label>
+            <textarea
+              className="w-full mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-700 font-medium">
+              Store Owner
+            </label>
+            <select
+              className="w-full mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
+              value={ownerId}
+              onChange={(e) => setOwnerId(e.target.value)}
+              disabled={storeOwners.length === 0}
+            >
+              {storeOwners.map((owner) => (
+                <option key={owner.id} value={owner.id}>
+                  {owner.name} ({owner.email})
+                </option>
+              ))}
+            </select>
+            {storeOwners.length === 0 && (
+              <p className="text-sm text-gray-500 mt-1">
+                No store owners available
+              </p>
+            )}
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading || storeOwners.length === 0}
+            className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400 transition"
           >
-            {storeOwners.map((owner) => (
-              <option key={owner.id} value={owner.id}>
-                {owner.name} ({owner.email})
-              </option>
-            ))}
-          </select>
-          {storeOwners.length === 0 && <div>No store owners available</div>}
-        </div>
-        <button type="submit" disabled={loading || storeOwners.length === 0}>
-          {loading ? "Creating..." : "Create Store"}
-        </button>
-      </form>
+            {loading ? "Creating..." : "Create Store"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

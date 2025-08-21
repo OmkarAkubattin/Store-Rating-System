@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import authService from "../../services/auth";
 import { validatePassword } from "../../utils/validation";
+import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 
 const ChangePassword = () => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -49,45 +50,94 @@ const ChangePassword = () => {
   };
 
   return (
-    <div>
-      <h1>Change Password</h1>
-      {errors.form && <div>{errors.form}</div>}
-      {success && <div>Password changed successfully!</div>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Current Password:</label>
-          <input
-            type="password"
-            value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
-            required
-          />
-          {errors.currentPassword && <div>{errors.currentPassword}</div>}
-        </div>
-        <div>
-          <label>New Password:</label>
-          <input
-            type="password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            required
-          />
-          {errors.newPassword && <div>{errors.newPassword}</div>}
-        </div>
-        <div>
-          <label>Confirm New Password:</label>
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-          {errors.confirmPassword && <div>{errors.confirmPassword}</div>}
-        </div>
-        <button type="submit" disabled={loading}>
-          {loading ? "Changing..." : "Change Password"}
-        </button>
-      </form>
+    <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      <div className="w-full max-w-md bg-white shadow-md rounded-2xl p-6">
+        <h1 className="text-xl font-bold text-gray-800 mb-4">
+          🔒 Change Password
+        </h1>
+
+        {/* Form-level error */}
+        {errors.form && (
+          <div className="mb-4 flex items-center gap-2 text-red-600 bg-red-50 border border-red-200 px-3 py-2 rounded-md text-sm">
+            <AlertCircle size={18} /> {errors.form}
+          </div>
+        )}
+
+        {/* Success message */}
+        {success && (
+          <div className="mb-4 flex items-center gap-2 text-green-600 bg-green-50 border border-green-200 px-3 py-2 rounded-md text-sm">
+            <CheckCircle2 size={18} /> Password changed successfully!
+            Redirecting...
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Current Password */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Current Password
+            </label>
+            <input
+              type="password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              required
+              className="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+            {errors.currentPassword && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.currentPassword}
+              </p>
+            )}
+          </div>
+
+          {/* New Password */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              New Password
+            </label>
+            <input
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              required
+              className="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+            {errors.newPassword && (
+              <p className="text-sm text-red-500 mt-1">{errors.newPassword}</p>
+            )}
+          </div>
+
+          {/* Confirm Password */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Confirm New Password
+            </label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              className="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+            {errors.confirmPassword && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.confirmPassword}
+              </p>
+            )}
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-2 px-4 rounded-md shadow-md hover:bg-blue-700 transition disabled:opacity-50"
+          >
+            {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+            {loading ? "Changing..." : "Change Password"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
