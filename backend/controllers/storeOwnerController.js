@@ -1,4 +1,4 @@
-const { Rating, User } = require("../models");
+const { Rating, User, Store } = require("../models");
 const sequelize = require("../config/db");
 
 

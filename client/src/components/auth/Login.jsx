@@ -28,7 +28,7 @@ const Login = () => {
           Or{" "}
           <button
             onClick={() => navigate("/register")}
-            className="font-medium text-primary-600 hover:text-primary-500"
+            className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
           >
             create a new account
           </button>

@@ -18,8 +18,8 @@ const CreateStore = () => {
     const fetchStoreOwners = async () => {
       try {
         const owners = await userService.getStoreOwners();
-        setStoreOwners(owners);
-        if (owners.length > 0) setOwnerId(owners[0].id);
+        setStoreOwners(owners.data);
+        if (owners.data.length > 0) setOwnerId(owners.data[0].id);
       } catch (error) {
         setErrors({ form: "Failed to load store owners" });
       }

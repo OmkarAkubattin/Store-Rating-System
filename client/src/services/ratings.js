@@ -17,10 +17,11 @@ const submitRating = async (storeId, rating) => {
 };
 
 const updateRating = async (storeId, rating) => {
+  // Use POST, not PUT
   const token = localStorage.getItem("token");
-  const response = await axios.put(
-    `${API_URL}/user/ratings/${storeId}`,
-    { rating },
+  const response = await axios.post(
+    `${API_URL}/user/ratings`,
+    { storeId, rating },
     {
       headers: {
         Authorization: `Bearer ${token}`,

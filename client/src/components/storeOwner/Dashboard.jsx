@@ -10,8 +10,8 @@ const OwnerDashboard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const data = await storeOwnerService.getStoreStats();
-        setStats(data);
+        const response = await storeOwnerService.getStoreStats();
+        setStats(response.data);
       } catch (err) {
         setError("⚠️ Failed to load store stats");
       } finally {
@@ -46,10 +46,12 @@ const OwnerDashboard = () => {
       {/* Store Info Card */}
       <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-6 mb-8">
         <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2 mb-4">
-          <Store className="text-blue-600" /> {stats.store.name}
+          <Store className="text-blue-600" />{" "}
+          {stats?.store?.name || "No store found"}
         </h2>
         <p className="flex items-center text-gray-600 gap-2">
-          <MapPin className="w-4 h-4 text-gray-500" /> {stats.store.address}
+          <MapPin className="w-4 h-4 text-gray-500" />{" "}
+          {stats?.store?.address || "No address"}
         </p>
       </div>
 
@@ -58,7 +60,7 @@ const OwnerDashboard = () => {
         <div className="bg-white shadow-md rounded-xl p-6 border border-gray-200 flex flex-col items-center">
           <Star className="text-yellow-500 w-8 h-8 mb-2" />
           <h3 className="text-lg font-semibold text-gray-800">
-            {stats.averageRating || "No ratings yet"}
+            {stats?.averageRating || "No ratings yet"}
           </h3>
           <p className="text-gray-500 text-sm">Average Rating</p>
         </div>
@@ -66,7 +68,7 @@ const OwnerDashboard = () => {
         <div className="bg-white shadow-md rounded-xl p-6 border border-gray-200 flex flex-col items-center">
           <Users className="text-blue-500 w-8 h-8 mb-2" />
           <h3 className="text-lg font-semibold text-gray-800">
-            {stats.totalRatings}
+            {stats?.totalRatings ?? 0}
           </h3>
           <p className="text-gray-500 text-sm">Total Ratings</p>
         </div>

@@ -108,19 +108,32 @@ exports.getUserDetails = async (req, res) => {
         attributes: ["id", "name", "email", "address"],
       });
 
+      // If no store, return with store: null and averageRating: 0
+      if (!store) {
+        return res.json({
+          success: true,
+          data: {
+            ...user.toJSON(),
+            store: null,
+            averageRating: 0,
+          },
+        });
+      }
+
       const ratings = await Rating.findAll({
-        where: { storeId: store?.id },
+        where: { storeId: store.id },
         attributes: [
           [sequelize.fn("AVG", sequelize.col("rating")), "averageRating"],
         ],
       });
+      const averageRating = ratings[0]?.dataValues.averageRating || 0;
 
       return res.json({
         success: true,
         data: {
           ...user.toJSON(),
           store,
-          averageRating: ratings[0]?.dataValues.averageRating || 0,
+          averageRating,
         },
       });
     }
@@ -183,20 +196,25 @@ exports.listStores = async (req, res) => {
   try {
     const stores = await Store.findAll({
       where,
+      attributes: {
+        include: [
+          [
+            sequelize.literal(`(
+              SELECT AVG(rating)
+              FROM Ratings AS rating
+              WHERE rating.storeId = Store.id
+            )`),
+            "averageRating",
+          ],
+        ],
+      },
       include: [
         {
           model: User,
           as: "owner",
           attributes: ["id", "name", "email"],
         },
-        {
-          model: Rating,
-          attributes: [
-            [sequelize.fn("AVG", sequelize.col("rating")), "averageRating"],
-          ],
-        },
       ],
-      group: ["Store.id"],
       order: [["name", "ASC"]],
     });
 
